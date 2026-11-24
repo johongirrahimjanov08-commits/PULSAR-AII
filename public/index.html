@@ -1,0 +1,4523 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050509">
+
+<title>PULSAR AI — Create Beyond Limits</title>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --purple: #8525ff;
+  --blue: #174cff;
+  --text: #f5f5fa;
+  --muted: #92939f;
+  --line: rgba(255,255,255,.09);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+button, textarea, input {
+  font-family: inherit;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: #020204;
+  color: var(--text);
+  height: 100dvh;
+  overflow: hidden;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+}
+
+.app {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  background: #030305;
+}
+
+/* =====================================
+   COSMIC BACKGROUND
+===================================== */
+
+.space-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #020204;
+}
+
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.nebula-blue {
+  width: 85%;
+  height: 75%;
+  left: 8%;
+  top: -15%;
+  border: 35px solid rgba(0,65,255,.22);
+  transform: rotate(-35deg);
+  filter: blur(35px);
+  box-shadow:
+    0 0 70px #073eff55,
+    inset 0 0 65px #003cff33;
+}
+
+.nebula-purple {
+  width: 80%;
+  height: 55%;
+  right: -24%;
+  bottom: 5%;
+  border: 45px solid rgba(100,0,255,.28);
+  transform: rotate(-38deg);
+  filter: blur(28px);
+  box-shadow:
+    0 0 80px #6200ff66,
+    inset 0 0 60px #3400ff44;
+}
+
+.nebula-light {
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 28%, #0044ff50, transparent 13%),
+    radial-gradient(ellipse at 43% 74%, #0055ff70, transparent 15%),
+    radial-gradient(ellipse at 76% 84%, #6100ff70, transparent 13%),
+    radial-gradient(ellipse at 98% 57%, #7800ff90, transparent 10%),
+    radial-gradient(ellipse at 59% 36%, #2200ff25, transparent 15%);
+  filter: blur(22px);
+}
+
+/* =====================================
+   LIQUID GLASS
+===================================== */
+
+.glass,
+button,
+.feature,
+.history-item.active {
+
+  background:
+    radial-gradient(
+      ellipse at 10% 0%,
+      rgba(255,255,255,.23),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 90% 100%,
+      rgba(120,40,255,.28),
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(135,110,210,.12),
+      rgba(25,15,55,.22),
+      rgba(80,40,160,.12)
+    );
+
+  border: 1px solid rgba(185,160,255,.25);
+
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.22),
+    inset 1px 0 3px rgba(190,170,255,.12),
+    inset 0 -2px 5px rgba(140,75,255,.15),
+    0 4px 15px rgba(0,0,0,.25);
+
+  transition:
+    background .25s,
+    box-shadow .25s,
+    border-color .25s,
+    transform .2s,
+    filter .25s;
+}
+
+button:hover:not(:disabled),
+.feature:hover {
+  border-color: rgba(220,195,255,.65);
+
+  box-shadow:
+    inset 0 2px 4px #ffffff55,
+    inset 0 -2px 5px #9d48ff44,
+    0 0 20px #7825ff35;
+
+  filter: brightness(1.18);
+}
+
+button:active:not(:disabled) {
+  transform: scale(.97);
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+button:focus-visible {
+  outline: 2px solid #b38aff;
+  outline-offset: 3px;
+}
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.sidebar {
+  width: 282px;
+  min-width: 282px;
+  height: 100%;
+  position: relative;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 22px 17px 18px;
+
+  background:
+    radial-gradient(
+      ellipse at 100% 28%,
+      rgba(13,45,135,.19),
+      transparent 43%
+    ),
+    rgba(4,4,8,.88);
+
+  backdrop-filter: blur(28px);
+
+  border: 1px solid rgba(255,255,255,.10);
+  border-left: 0;
+
+  border-radius: 0 19px 19px 0;
+
+  box-shadow:
+    10px 0 45px #0005,
+    inset -1px 0 #ffffff08;
+
+  overflow: hidden;
+
+  transition:
+    width .3s ease,
+    min-width .3s ease,
+    left .3s ease;
+}
+
+.sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* =====================================
+   PULSAR LOGO
+===================================== */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 0 5px 25px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.logo-symbol {
+  width: 47px;
+  height: 40px;
+  overflow: visible;
+  flex-shrink: 0;
+
+  filter:
+    drop-shadow(0 0 6px #8b32ff90);
+}
+
+.logo-text {
+  font-size: 15px;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: .7px;
+  white-space: nowrap;
+}
+
+.logo-text span {
+  color: #8b20ff;
+  text-shadow: 0 0 12px #8b20ff90;
+}
+
+.sidebar-toggle {
+  margin-left: auto;
+  width: 25px;
+  height: 25px;
+  border-radius: 6px;
+
+  display: grid;
+  place-items: center;
+
+  background: #ffffff06;
+  border: 1px solid #ffffff22;
+  box-shadow: none;
+}
+
+/* =====================================
+   NEW CHAT BUTTON
+===================================== */
+
+.new-chat {
+  width: 100%;
+  min-height: 49px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border-radius: 17px;
+  font-size: 14px;
+  font-weight: 500;
+
+  color: white;
+
+  background:
+    radial-gradient(
+      ellipse at 0% 15%,
+      #e8baffb0,
+      transparent 45%
+    ),
+    linear-gradient(
+      100deg,
+      #a657f6,
+      #7922ef 65%,
+      #7015f7
+    );
+
+  border: 1px solid #c69bff99;
+
+  box-shadow:
+    inset 0 2px 3px #ffffff88,
+    inset 2px 0 4px #ffffff44,
+    inset 0 -2px 5px #a769ff99,
+    0 0 18px #9d45ff55,
+    0 6px 25px #6400ff25;
+
+  margin: 0 0 24px;
+}
+
+.new-chat svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  width: 100%;
+  min-height: 43px;
+  padding: 12px 15px;
+
+  text-align: left;
+  font-size: 13px;
+
+  border: 1px solid transparent;
+  border-radius: 13px;
+
+  background: transparent;
+  box-shadow: none;
+
+  color: #c9c9d1;
+}
+
+.nav-button svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.nav-button.active {
+  color: white;
+
+  background:
+    linear-gradient(
+      100deg,
+      rgba(88,44,160,.28),
+      rgba(20,49,125,.32)
+    );
+
+  border-color: #7149bb22;
+}
+
+.nav-button:hover {
+  background: #6730c51a;
+}
+
+.nav-count {
+  margin-left: auto;
+
+  font-size: 12px;
+  color: #d5c9f5;
+
+  text-shadow: 0 0 8px #ae87ff;
+}
+
+.side-divider {
+  height: 1px;
+  flex-shrink: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #ffffff14,
+      transparent
+    );
+
+  margin: 20px 0 13px;
+}
+
+.side-label {
+  padding: 0 8px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #73717e;
+}
+
+/* =====================================
+   CHAT HISTORY
+===================================== */
+
+.history {
+  flex: 1;
+  min-height: 30px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: #523080 transparent;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border: 1px solid transparent;
+  border-radius: 10px;
+
+  color: #b8b5c5;
+  padding: 10px;
+  margin-bottom: 5px;
+
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.history-item:hover {
+  background: #ffffff0a;
+}
+
+.history-item.active {
+  color: white;
+}
+
+.history-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favorite-btn {
+  width: 23px;
+  height: 23px;
+
+  flex-shrink: 0;
+
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+
+  color: #9c8eaf;
+  font-size: 16px;
+}
+
+.favorite-btn.selected {
+  color: #d7a8ff;
+}
+
+/* =====================================
+   UPGRADE CARD
+===================================== */
+
+.upgrade-card {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 95px;
+  flex-shrink: 0;
+
+  margin-top: 13px;
+  padding: 14px;
+
+  border-radius: 15px;
+  border: 1px solid #a05aff30;
+
+  background:
+    radial-gradient(
+      ellipse at 100% 65%,
+      #7100ff65,
+      transparent 55%
+    ),
+    linear-gradient(
+      120deg,
+      #08080d,
+      #140629
+    );
+
+  box-shadow:
+    inset 0 1px #ffffff0c,
+    0 0 20px #6b00ff10;
+}
+
+.upgrade-card h3 {
+  font-size: 12px;
+  font-weight: 500;
+  position: relative;
+  z-index: 2;
+}
+
+.crown {
+  color: #ffcf44;
+  margin-right: 5px;
+}
+
+.upgrade-card p {
+  margin-top: 9px;
+  color: #b5adbf;
+  font-size: 10px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 2;
+}
+
+.upgrade-art {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+
+  right: -5px;
+  bottom: 0;
+
+  filter: drop-shadow(0 0 12px #8e25ff);
+}
+
+.upgrade-arrow {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 16px;
+  z-index: 3;
+}
+
+/* =====================================
+   PROFILE
+===================================== */
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 9px 4px 5px;
+}
+
+.profile-avatar {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: white;
+
+  background:
+    radial-gradient(circle at 30% 10%, #40147955, transparent 80%),
+    #090711;
+
+  border: 1px solid #773fbc66;
+
+  box-shadow:
+    inset 0 1px 4px #ae6aff22,
+    0 0 10px #6100ff12;
+}
+
+.account-login-btn {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+
+  text-align: left;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.profile-name {
+  color: white;
+  font-size: 12px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-plan {
+  font-size: 11px;
+  color: #a14bff;
+}
+
+.settings-btn {
+  width: 30px;
+  height: 30px;
+
+  display: grid;
+  place-items: center;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  box-shadow: none;
+}
+
+.settings-btn svg {
+  width: 21px;
+  height: 21px;
+}
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.main {
+  flex: 1;
+  min-width: 0;
+
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  background: transparent;
+}
+
+.topbar {
+  height: 62px;
+  padding: 13px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex-shrink: 0;
+  position: relative;
+  z-index: 5;
+}
+
+.top-left,
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-button {
+  border-radius: 25px;
+  padding: 9px 14px;
+  font-size: 11px;
+
+  color: #d4cede;
+
+  background: rgba(10,8,20,.30);
+  border: 1px solid #ffffff12;
+}
+
+#openSidebarButton {
+  display: none;
+}
+
+.sidebar.collapsed + .main #openSidebarButton {
+  display: inline-block;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+}
+
+/* =====================================
+   CENTER PULSAR LOGO
+===================================== */
+
+.welcome {
+  flex: 1;
+  min-height: 140px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 15px;
+
+  position: relative;
+}
+
+.hero-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  opacity: .88;
+
+  filter:
+    drop-shadow(0 0 10px #6928ff55);
+
+  animation: logoFloat 6s ease-in-out infinite;
+}
+
+.hero-logo .logo-symbol {
+  width: 120px;
+  height: 100px;
+}
+
+.hero-logo .logo-text {
+  font-size: clamp(24px, 3.1vw, 42px);
+  letter-spacing: 1.4px;
+}
+
+.hero-logo .logo-text span {
+  color: #821cff;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =====================================
+   CHAT MESSAGES
+===================================== */
+
+.chat-area {
+  width: min(800px, calc(100% - 48px));
+
+  margin: 0 auto;
+
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+
+  display: none;
+
+  padding: 22px 5px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #6e409955 transparent;
+}
+
+.chat-area.active {
+  display: block;
+}
+
+.message {
+  width: 100%;
+  margin: 0 0 25px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.user-message {
+  align-items: flex-end;
+}
+
+.user-bubble {
+  max-width: 82%;
+
+  padding: 13px 16px;
+
+  background: rgba(45,25,80,.45);
+  border: 1px solid #b18aff25;
+  border-radius: 17px 17px 5px 17px;
+
+  backdrop-filter: blur(20px);
+
+  color: #f5f5fa;
+  font-size: 13px;
+  line-height: 1.7;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ai-message {
+  align-items: flex-start;
+}
+
+.ai-content {
+  width: 100%;
+  color: #e6e6eb;
+
+  font-size: 14px;
+  line-height: 1.85;
+
+  overflow-wrap: anywhere;
+}
+
+.ai-content h1,
+.ai-content h2,
+.ai-content h3 {
+  color: white;
+  margin: 18px 0 9px;
+  line-height: 1.4;
+}
+
+.ai-content h1 { font-size: 22px; }
+.ai-content h2 { font-size: 19px; }
+.ai-content h3 { font-size: 16px; }
+.ai-content p { margin: 8px 0; }
+
+.ai-content ul,
+.ai-content ol {
+  padding-left: 22px;
+  margin: 9px 0;
+}
+
+.ai-content li {
+  margin: 5px 0;
+}
+
+.ai-content a {
+  color: #bd9bff;
+}
+
+.ai-content blockquote {
+  border-left: 3px solid #984bff;
+  padding-left: 14px;
+  color: #bcbcc8;
+  margin: 12px 0;
+}
+
+.ai-content pre {
+  background: #0d0a14;
+  border: 1px solid #b28aff22;
+
+  padding: 15px;
+  border-radius: 12px;
+  overflow: auto;
+  margin: 12px 0;
+}
+
+.ai-content code {
+  font-family: Consolas, monospace;
+  color: #c6baff;
+
+  background: #ffffff0d;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.ai-content pre code {
+  background: none;
+  padding: 0;
+  color: #eee;
+}
+
+.ai-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 12px;
+}
+
+.ai-content td,
+.ai-content th {
+  border: 1px solid #ffffff20;
+  padding: 9px;
+  text-align: left;
+}
+
+.copy-btn {
+  margin-top: 10px;
+
+  padding: 6px 11px;
+  border-radius: 8px;
+
+  font-size: 10px;
+  color: #c9b9e8;
+}
+
+/* =====================================
+   THINKING ANIMATION
+===================================== */
+
+.typing {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  height: 32px;
+  padding: 0 3px;
+}
+
+.typing span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e5eaff,
+      #9c8aff,
+      #7925ff
+    );
+
+  box-shadow: 0 0 13px #8b45ff88;
+
+  animation: lumenFlow 1.35s ease-in-out infinite;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: .18s;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: .36s;
+}
+
+@keyframes lumenFlow {
+  0%, 100% {
+    transform: translateY(2px) scale(.72);
+    opacity: .45;
+  }
+
+  50% {
+    transform: translateY(-5px) scale(1.15);
+    opacity: 1;
+  }
+}
+
+/* =====================================
+   CHAT INPUT
+===================================== */
+
+.composer-wrap {
+  width: min(760px, calc(100% - 48px));
+
+  margin: 0 auto;
+
+  padding: 0 0 20px;
+
+  flex-shrink: 0;
+  position: relative;
+  z-index: 4;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  margin-bottom: 10px;
+}
+
+.quick-btn {
+  border-radius: 30px;
+  padding: 9px 14px;
+
+  font-size: 11px;
+  color: #ded5ed;
+}
+
+.composer {
+  border: 1px solid rgba(170,135,255,.20);
+
+  background: rgba(10,8,18,.76);
+
+  backdrop-filter: blur(25px);
+
+  border-radius: 19px;
+  padding: 13px;
+
+  box-shadow:
+    0 15px 45px #0006,
+    inset 0 1px #ffffff12;
+
+  transition: .25s;
+}
+
+.composer:focus-within {
+  border-color: #a46aff77;
+
+  box-shadow:
+    0 0 20px #7722ff15,
+    inset 0 1px #ffffff16;
+}
+
+.input-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.sparkle {
+  color: #b38aff;
+  font-size: 18px;
+  padding-top: 2px;
+
+  text-shadow: 0 0 12px #8230ff;
+}
+
+#messageInput {
+  width: 100%;
+
+  min-height: 48px;
+  max-height: 180px;
+
+  resize: none;
+  outline: none;
+
+  border: 0;
+  background: transparent;
+
+  color: white;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#messageInput::placeholder {
+  color: #777180;
+}
+
+.composer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 7px;
+}
+
+.tools-left,
+.tools-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+}
+
+.tool-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.plus-btn {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+  font-size: 22px;
+}
+
+.send-btn {
+  width: 37px;
+  height: 37px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  color: white;
+  font-size: 20px;
+
+  background:
+    radial-gradient(circle at 25% 10%, #e5bfffaa, transparent 45%),
+    linear-gradient(145deg, #ad66ff, #7020e7, #3d079c);
+
+  border-color: #dbb9ff99;
+
+  box-shadow:
+    inset 0 2px 3px #ffffff77,
+    inset 0 -2px 4px #b76aff66,
+    0 0 17px #842dff55;
+}
+
+.send-btn:hover:not(:disabled) {
+  transform: scale(1.08);
+}
+
+.disclaimer {
+  text-align: center;
+  color: #77717f;
+  font-size: 9px;
+  margin-top: 10px;
+}
+
+/* =====================================
+   ATTACHMENT MENU
+===================================== */
+
+.attach-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.attach-menu {
+  display: none;
+  position: absolute;
+
+  left: 0;
+  bottom: 44px;
+
+  width: 195px;
+
+  padding: 7px;
+
+  border: 1px solid #b78bff33;
+  border-radius: 13px;
+
+  background: #100a1ded;
+
+  backdrop-filter: blur(25px);
+
+  box-shadow: 0 12px 35px #0009;
+
+  z-index: 30;
+}
+
+.attach-menu.open {
+  display: block;
+}
+
+.attach-option {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 11px 10px;
+
+  border-radius: 8px;
+  margin: 3px 0;
+
+  color: #eee;
+  font-size: 11px;
+  text-align: left;
+}
+
+.attach-option-icon {
+  width: 25px;
+  height: 25px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 7px;
+  background: #a96aff22;
+  color: #d9c3ff;
+
+  font-size: 14px;
+}
+
+/* =====================================
+   IMAGE PREVIEW
+===================================== */
+
+.image-preview-wrap {
+  display: none;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 0 12px 27px;
+}
+
+.image-preview-wrap.visible {
+  display: flex;
+}
+
+.image-preview {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+
+  border-radius: 12px;
+  border: 1px solid #b58aff88;
+}
+
+.image-preview-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.image-preview-name {
+  color: #eee;
+  font-size: 11px;
+  max-width: 180px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-preview-label {
+  color: #a99eae;
+  font-size: 9px;
+}
+
+.remove-image-btn {
+  width: 27px;
+  height: 27px;
+
+  margin-left: auto;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 17px;
+}
+
+.remove-image-btn:hover {
+  background: #ff456533;
+  border-color: #ff7188;
+}
+
+.user-image-preview {
+  display: block;
+
+  width: min(220px, 100%);
+  max-height: 250px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+  margin-bottom: 9px;
+
+  border: 1px solid #ffffff20;
+}
+
+.generated-image-card {
+  width: min(100%, 680px);
+
+  margin-top: 8px;
+  padding: 10px;
+
+  border: 1px solid #ffffff1c;
+  border-radius: 15px;
+
+  background: #0c0815;
+}
+
+.generated-image-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 650px;
+
+  object-fit: contain;
+
+  border-radius: 10px;
+}
+
+.generated-image-caption {
+  color: #bdbdc8;
+  font-size: 10px;
+  margin: 9px 2px 1px;
+}
+
+/* =====================================
+   FEATURE CARDS
+===================================== */
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  margin-top: 12px;
+}
+
+.feature {
+  min-height: 90px;
+
+  padding: 11px;
+
+  background: rgba(16,10,31,.35);
+  border: 1px solid #a282ff20;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+}
+
+.feature:hover {
+  transform: translateY(-3px);
+}
+
+.feature-icon {
+  width: 25px;
+  height: 25px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #9749ff22;
+
+  font-size: 12px;
+  margin-bottom: 9px;
+}
+
+.feature h3 {
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.feature p {
+  font-size: 9px;
+  line-height: 1.6;
+  color: #9993a6;
+}
+
+.feature-tag {
+  float: right;
+  font-size: 8px;
+
+  color: #c8b4f7;
+
+  border: 1px solid #b88aff33;
+  border-radius: 20px;
+
+  padding: 4px 6px;
+}
+
+/* =====================================
+   AUTH WINDOW
+===================================== */
+
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 1000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(12px);
+}
+
+.auth-box {
+  width: min(420px, 100%);
+
+  padding: 27px;
+  position: relative;
+
+  border: 1px solid #ba8aff44;
+  border-radius: 22px;
+
+  background:
+    radial-gradient(
+      ellipse at 0% 0%,
+      #4e1f7944,
+      transparent 65%
+    ),
+    #0d0915;
+
+  box-shadow:
+    0 25px 90px #000b,
+    inset 0 1px #ffffff22,
+    0 0 40px #5c00ff18;
+}
+
+.auth-close {
+  position: absolute;
+
+  top: 13px;
+  right: 15px;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: 8px;
+
+  font-size: 20px;
+  color: #ccc;
+}
+
+.auth-logo {
+  width: 45px;
+  height: 45px;
+
+  display: grid;
+  place-items: center;
+
+  margin: 0 auto 13px;
+
+  border-radius: 50%;
+
+  color: white;
+  font-size: 28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #b483ff,
+      #5313b7
+    );
+
+  box-shadow: 0 0 25px #a96aff55;
+}
+
+.auth-box h2 {
+  text-align: center;
+  color: white;
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #a9aab5;
+  font-size: 11px;
+  line-height: 1.6;
+
+  margin-bottom: 20px;
+}
+
+.auth-google {
+  width: 100%;
+
+  padding: 12px;
+  border-radius: 10px;
+
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  color: #817686;
+  font-size: 10px;
+
+  margin: 17px 0;
+}
+
+.auth-divider:before,
+.auth-divider:after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ffffff20;
+}
+
+.auth-input {
+  display: block;
+  width: 100%;
+
+  margin-bottom: 11px;
+  padding: 13px;
+
+  border: 1px solid #ffffff20;
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #08060f;
+  color: white;
+
+  font-size: 16px;
+}
+
+.auth-input:focus {
+  border-color: #a970ff;
+}
+
+.auth-input::placeholder {
+  color: #817786;
+}
+
+.auth-main-btn {
+  width: 100%;
+
+  padding: 13px;
+  margin-top: 3px;
+
+  border-radius: 10px;
+
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+
+  background:
+    radial-gradient(ellipse at 5% 0%, #e2b9ff88, transparent 45%),
+    linear-gradient(120deg, #9548ef, #5b15c4);
+}
+
+.auth-switch {
+  margin-top: 16px;
+  text-align: center;
+  color: #aaa;
+  font-size: 11px;
+}
+
+.auth-switch button {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+
+  padding: 4px;
+
+  color: #ba92ff;
+  font-size: 11px;
+}
+
+.auth-status {
+  min-height: 17px;
+  margin-top: 12px;
+
+  text-align: center;
+
+  font-size: 10px;
+  line-height: 1.5;
+
+  color: #bca1f4;
+}
+
+.auth-logout {
+  width: 100%;
+
+  padding: 11px;
+  margin-top: 10px;
+
+  background: #35202a;
+
+  border: 1px solid #ffffff20;
+  border-radius: 9px;
+
+  color: #ffb4c1;
+
+  font-size: 11px;
+}
+
+/* =====================================
+   MOBILE DESIGN
+===================================== */
+
+@media(max-width: 700px) {
+
+  .sidebar {
+    position: absolute;
+
+    left: -290px;
+    top: 0;
+    bottom: 0;
+
+    width: 282px;
+    min-width: 282px;
+
+    height: 100dvh;
+
+    box-shadow: 15px 0 50px #0009;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar.collapsed {
+    width: 282px;
+    min-width: 282px;
+    padding: 22px 17px 18px;
+  }
+
+  #openSidebarButton {
+    display: inline-block;
+  }
+
+  .topbar {
+    padding: 12px;
+    height: 56px;
+  }
+
+  .top-button {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  .hero-logo {
+    gap: 5px;
+  }
+
+  .hero-logo .logo-symbol {
+    width: 75px;
+    height: 70px;
+  }
+
+  .hero-logo .logo-text {
+    font-size: 26px;
+  }
+
+  .composer-wrap {
+    width: calc(100% - 24px);
+    padding-bottom: 12px;
+  }
+
+  .chat-area {
+    width: calc(100% - 25px);
+  }
+
+  .features {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .feature:last-child {
+    display: none;
+  }
+
+  .quick-btn {
+    font-size: 9px;
+    padding: 8px 10px;
+  }
+
+  .user-bubble {
+    max-width: 92%;
+  }
+}
+
+@media(max-height: 650px) {
+
+  .welcome {
+    min-height: 90px;
+  }
+
+  .feature {
+    min-height: 70px;
+  }
+
+  .upgrade-card {
+    min-height: 80px;
+  }
+
+  .sidebar {
+    padding-top: 12px;
+  }
+
+  .brand {
+    margin-bottom: 12px;
+  }
+
+  .new-chat {
+    margin-bottom: 12px;
+  }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SVG LOGO AND ICONS -->
+
+<svg xmlns="http://www.w3.org/2000/svg"
+style="position:absolute;width:0;height:0;overflow:hidden">
+
+  <defs>
+
+    <linearGradient id="orbitGradient">
+      <stop offset="0%" stop-color="#c4a4ff"/>
+      <stop offset="50%" stop-color="#6924f5"/>
+      <stop offset="100%" stop-color="#a94cff"/>
+    </linearGradient>
+
+    <radialGradient id="starGradient">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#dbc5ff"/>
+      <stop offset="100%" stop-color="#7940d5"/>
+    </radialGradient>
+
+    <linearGradient id="diamondGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eacfff"/>
+      <stop offset="45%" stop-color="#a94aff"/>
+      <stop offset="100%" stop-color="#4d00c7"/>
+    </linearGradient>
+
+  </defs>
+
+  <symbol id="pulsarLogo" viewBox="0 0 100 80">
+
+    <ellipse
+      cx="49" cy="43"
+      rx="45" ry="14"
+      transform="rotate(-32 49 43)"
+      fill="none"
+      stroke="url(#orbitGradient)"
+      stroke-width="5"/>
+
+    <path
+      d="M49 3
+         Q52 29 77 34
+         Q52 39 49 65
+         Q44 39 20 34
+         Q44 29 49 3Z"
+      fill="url(#starGradient)"/>
+
+    <path
+      d="M8 65 Q37 78 72 45"
+      stroke="#b8a4ff"
+      stroke-width="1.5"
+      fill="none"
+      opacity=".7"/>
+
+  </symbol>
+
+  <symbol id="iconPlus" viewBox="0 0 24 24">
+    <path
+      d="M12 5v14M5 12h14"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="iconChat" viewBox="0 0 24 24">
+    <path
+      d="M21 11.5a9 9 0 0 1-9 9
+      10 10 0 0 1-4-.8L3 22l1.2-5
+      A9 9 0 1 1 21 11.5Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linejoin="round"/>
+    <circle cx="8" cy="12" r="1" fill="currentColor"/>
+    <circle cx="12" cy="12" r="1" fill="currentColor"/>
+    <circle cx="16" cy="12" r="1" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="iconStar" viewBox="0 0 24 24">
+    <path
+      d="m12 2 3.1 6.3 7 .9-5 4.9 1.2 7
+      -6.3-3.3L5.7 21l1.2-6.9L2 9.2l6.9-1Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="iconHistory" viewBox="0 0 24 24">
+    <path
+      d="M3 12a9 9 0 1 1 3 6.7M3 5v7h7M12 7v5l4 2"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="iconSettings" viewBox="0 0 24 24">
+    <path
+      d="m10 2-.7 3-2 .9-2.6-1.5-2 3.5
+      L5 10v3l-2.3 2 2 3.5 2.6-1.5 2 .9
+      .7 3h4l.7-3 2-.9 2.6 1.5 2-3.5
+      -2.3-2v-3l2.3-2-2-3.5-2.6 1.5
+      -2-.9L14 2Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linejoin="round"/>
+    <circle
+      cx="12" cy="12" r="3.3"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"/>
+  </symbol>
+
+  <symbol id="iconMic" viewBox="0 0 24 24">
+    <rect x="9" y="2" width="6" height="13" rx="3"
+      fill="none" stroke="currentColor" stroke-width="1.8"/>
+    <path
+      d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"/>
+  </symbol>
+
+</svg>
+
+<div class="app">
+
+  <!-- COSMIC BACKGROUND -->
+
+  <div class="space-background">
+    <div class="nebula nebula-blue"></div>
+    <div class="nebula nebula-purple"></div>
+    <div class="nebula nebula-light"></div>
+  </div>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+      <div class="logo">
+
+        <svg class="logo-symbol">
+          <use href="#pulsarLogo"/>
+        </svg>
+
+        <div class="logo-text">
+          PULSAR <span>AI</span>
+        </div>
+
+      </div>
+
+      <button
+        class="sidebar-toggle"
+        onclick="toggleSidebar()"
+        aria-label="Close sidebar">
+
+        −
+
+      </button>
+
+    </div>
+
+    <button class="new-chat" onclick="newChat()">
+
+      <svg>
+        <use href="#iconPlus"/>
+      </svg>
+
+      New Chat
+
+    </button>
+
+    <div class="navigation">
+
+      <button
+        class="nav-button active"
+        id="allChatsButton"
+        onclick="setHistoryFilter('all')">
+
+        <svg>
+          <use href="#iconChat"/>
+        </svg>
+
+        All Chats
+
+        <span class="nav-count" id="chatCount">0</span>
+
+      </button>
+
+      <button
+        class="nav-button"
+        id="favoritesButton"
+        onclick="setHistoryFilter('favorites')">
+
+        <svg>
+          <use href="#iconStar"/>
+        </svg>
+
+        Favorites
+
+        <span class="nav-count" id="favoriteCount">0</span>
+
+      </button>
+
+      <button
+        class="nav-button"
+        id="historyButton"
+        onclick="setHistoryFilter('history')">
+
+        <svg>
+          <use href="#iconHistory"/>
+        </svg>
+
+        History
+
+      </button>
+
+    </div>
+
+    <div class="side-divider"></div>
+
+    <div class="history" id="history"></div>
+
+    <!-- UPGRADE TO PRO -->
+
+    <div class="upgrade-card">
+
+      <h3>
+        <span class="crown">♛</span>
+        Upgrade to Pro
+      </h3>
+
+      <p>
+        Unlock more features<br>
+        and get higher limits.
+      </p>
+
+      <svg class="upgrade-art" viewBox="0 0 100 100">
+
+        <ellipse
+          cx="50" cy="57"
+          rx="46" ry="14"
+          transform="rotate(-33 50 57)"
+          fill="none"
+          stroke="#8637ff"
+          stroke-width="3"/>
+
+        <polygon
+          points="50,5 71,39 50,50 29,39"
+          fill="url(#diamondGradient)"/>
+
+        <polygon
+          points="29,39 50,50 50,78"
+          fill="#ad58ff"/>
+
+        <polygon
+          points="71,39 50,50 50,78"
+          fill="#5900da"/>
+
+        <polygon
+          points="50,5 50,50 29,39"
+          fill="#e2b5ff"
+          opacity=".8"/>
+
+      </svg>
+
+      <button
+        class="upgrade-arrow"
+        onclick="showProInfo()"
+        aria-label="Upgrade information">
+
+        →
+
+      </button>
+
+    </div>
+
+    <div class="side-divider"></div>
+
+    <!-- USER PROFILE -->
+
+    <div class="profile">
+
+      <button
+        class="account-login-btn"
+        id="accountLoginButton"
+        onclick="openAuthModal()">
+
+        <div class="profile-avatar" id="profileAvatar">
+          G
+        </div>
+
+        <div class="profile-info">
+
+          <span
+            class="profile-name"
+            id="accountButtonText">
+
+            Guest ⌄
+
+          </span>
+
+          <span class="profile-plan">
+            Free Plan
+          </span>
+
+        </div>
+
+      </button>
+
+      <button
+        class="settings-btn"
+        onclick="openAuthModal()"
+        aria-label="Account settings">
+
+        <svg>
+          <use href="#iconSettings"/>
+        </svg>
+
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="top-left">
+
+        <button
+          class="top-button"
+          id="openSidebarButton"
+          onclick="toggleSidebar()">
+
+          ☰
+
+        </button>
+
+        <button
+          class="top-button"
+          onclick="toggleModel()">
+
+          PULSAR AI v1.0⌄
+
+        </button>
+
+      </div>
+
+      <div class="top-right">
+
+        <button
+          class="top-button"
+          onclick="exportChat()">
+
+          Export ↗
+
+        </button>
+
+      </div>
+
+    </header>
+
+    <section class="content">
+
+      <!-- CENTER LOGO -->
+
+      <div class="welcome" id="welcome">
+
+        <div class="hero-logo">
+
+          <svg class="logo-symbol">
+            <use href="#pulsarLogo"/>
+          </svg>
+
+          <div class="logo-text">
+            PULSAR <span>AI</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CHAT -->
+
+      <div class="chat-area" id="chatArea"></div>
+
+      <!-- MESSAGE COMPOSER -->
+
+      <div class="composer-wrap">
+
+        <div class="quick-actions">
+
+          <button
+            class="quick-btn"
+            onclick="focusInput('Rasm yaratib ber: ')">
+
+            ✧ &nbsp; Create Image
+
+          </button>
+
+          <button
+            class="quick-btn"
+            onclick="focusInput('Brainstorm ideas for ')">
+
+            ✦ &nbsp; Brainstorm
+
+          </button>
+
+          <button
+            class="quick-btn"
+            onclick="focusInput('Make a plan for ')">
+
+            ▤ &nbsp; Make a plan
+
+          </button>
+
+        </div>
+
+        <div class="composer">
+
+          <div
+            class="image-preview-wrap"
+            id="imagePreviewWrap">
+
+            <img
+              class="image-preview"
+              id="imagePreview"
+              alt="Tanlangan rasm">
+
+            <div class="image-preview-info">
+
+              <span
+                class="image-preview-name"
+                id="imagePreviewName">
+              </span>
+
+              <span class="image-preview-label">
+                PULSAR AI uchun tayyor
+              </span>
+
+            </div>
+
+            <button
+              class="remove-image-btn"
+              type="button"
+              onclick="removeSelectedImage()">
+
+              ×
+
+            </button>
+
+          </div>
+
+          <div class="input-row">
+
+            <span class="sparkle">✦</span>
+
+            <textarea
+              id="messageInput"
+              placeholder="Ask PULSAR AI anything..."
+              rows="2">
+            </textarea>
+
+          </div>
+
+          <div class="composer-bottom">
+
+            <div class="tools-left">
+
+              <div class="attach-wrap">
+
+                <button
+                  class="plus-btn"
+                  id="attachButton"
+                  type="button"
+                  aria-label="Add image"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  onclick="toggleAttachMenu()">
+
+                  +
+
+                </button>
+
+                <div
+                  class="attach-menu"
+                  id="attachMenu">
+
+                  <button
+                    class="attach-option"
+                    type="button"
+                    onclick="takePhoto()">
+
+                    <span class="attach-option-icon">
+                      ◎
+                    </span>
+
+                    Rasmga olish
+
+                  </button>
+
+                  <button
+                    class="attach-option"
+                    type="button"
+                    onclick="chooseImage()">
+
+                    <span class="attach-option-icon">
+                      ▧
+                    </span>
+
+                    Rasm tanlash
+
+                  </button>
+
+                </div>
+
+              </div>
+
+              <input
+                type="file"
+                id="cameraInput"
+                accept="image/*"
+                capture="environment"
+                hidden>
+
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                hidden>
+
+            </div>
+
+            <div class="tools-right">
+
+              <button
+                class="tool-btn"
+                title="Voice input"
+                onclick="voiceInput()">
+
+                <svg>
+                  <use href="#iconMic"/>
+                </svg>
+
+              </button>
+
+              <button
+                class="send-btn"
+                id="sendBtn"
+                onclick="sendMessage()">
+
+                ↑
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="disclaimer">
+
+          PULSAR AI can make mistakes.
+          Check important information.
+
+        </div>
+
+        <div class="features" id="features">
+
+          <div
+            class="feature"
+            onclick="focusInput('Rasm yaratib ber: ')">
+
+            <span class="feature-tag">
+              Create now
+            </span>
+
+            <div class="feature-icon">▧</div>
+
+            <h3>Image Generator</h3>
+
+            <p>
+              Create high-quality image concepts instantly from text.
+            </p>
+
+          </div>
+
+          <div
+            class="feature"
+            onclick="focusInput('Create a professional presentation about ')">
+
+            <span class="feature-tag">
+              Make a deck
+            </span>
+
+            <div class="feature-icon">▤</div>
+
+            <h3>AI Presentation</h3>
+
+            <p>
+              Turn ideas into engaging, professional presentations.
+            </p>
+
+          </div>
+
+          <div
+            class="feature"
+            onclick="focusInput('Help me write production-ready code for ')">
+
+            <span class="feature-tag">
+              Generate code
+            </span>
+
+            <div class="feature-icon">⌘</div>
+
+            <h3>Dev Assistant</h3>
+
+            <p>
+              Generate clean, production-ready code in seconds.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- AUTHENTICATION -->
+
+<div
+  class="auth-overlay"
+  id="authModal"
+  onclick="authBackdropClick(event)">
+
+  <div class="auth-box">
+
+    <button
+      class="auth-close"
+      onclick="closeAuthModal()">
+
+      ×
+
+    </button>
+
+    <div class="auth-logo">✦</div>
+
+    <h2 id="authTitle">
+      Welcome to PULSAR AI
+    </h2>
+
+    <p class="auth-subtitle" id="authSubtitle">
+      Sign in to continue your journey.
+    </p>
+
+    <div id="authForm">
+
+      <button
+        class="auth-google"
+        id="googleLoginButton"
+        onclick="googleLogin()">
+
+        G &nbsp; Continue with Google
+
+      </button>
+
+      <div class="auth-divider">
+        OR CONTINUE WITH EMAIL
+      </div>
+
+      <input
+        class="auth-input"
+        id="authEmail"
+        type="email"
+        placeholder="Email address"
+        autocomplete="email">
+
+      <input
+        class="auth-input"
+        id="authPassword"
+        type="password"
+        placeholder="Password (minimum 8 characters)"
+        autocomplete="current-password">
+
+      <input
+        class="auth-input"
+        id="authCode"
+        type="text"
+        placeholder="6-digit verification code"
+        inputmode="numeric"
+        maxlength="6"
+        autocomplete="one-time-code"
+        style="display:none">
+
+      <button
+        class="auth-main-btn"
+        id="authSubmitButton"
+        onclick="emailAuth()">
+
+        Sign in
+
+      </button>
+
+      <div class="auth-switch" id="authSwitch">
+
+        Don't have an account?
+
+        <button onclick="switchAuthMode('signup')">
+          Create account
+        </button>
+
+      </div>
+
+    </div>
+
+    <button
+      class="auth-logout"
+      id="authLogoutButton"
+      onclick="logoutAccount()"
+      style="display:none">
+
+      Sign out
+
+    </button>
+
+    <div
+      class="auth-status"
+      id="authStatus"
+      aria-live="polite">
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =====================================
+   PULSAR AI — JAVASCRIPT
+===================================== */
+
+/* SUPABASE */
+
+const SUPABASE_URL =
+  "https://skvlgskstijfrflhhmsj.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_ZIDAVr4dqiXbwaEW0n22IQ_yQpuhRK3";
+
+let supabaseClient = null;
+let currentUser = null;
+let authMode = "signin";
+let currentAuthSession = null;
+
+try {
+
+  if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) {
+
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+  }
+
+} catch (error) {
+
+  console.error("Supabase initialization error:", error);
+
+}
+
+/* DOM ELEMENTS */
+
+const input =
+  document.getElementById("messageInput");
+
+const chatArea =
+  document.getElementById("chatArea");
+
+const welcome =
+  document.getElementById("welcome");
+
+const features =
+  document.getElementById("features");
+
+const sendBtn =
+  document.getElementById("sendBtn");
+
+const sidebar =
+  document.getElementById("sidebar");
+
+const historyElement =
+  document.getElementById("history");
+
+const attachMenu =
+  document.getElementById("attachMenu");
+
+const attachButton =
+  document.getElementById("attachButton");
+
+const cameraInput =
+  document.getElementById("cameraInput");
+
+const fileInput =
+  document.getElementById("fileInput");
+
+const imagePreviewWrap =
+  document.getElementById("imagePreviewWrap");
+
+const imagePreview =
+  document.getElementById("imagePreview");
+
+const imagePreviewName =
+  document.getElementById("imagePreviewName");
+
+/* STATE */
+
+let messages = [];
+let conversations = [];
+let activeChatId = null;
+let busy = false;
+
+let selectedImageData = null;
+let selectedImageName = "";
+
+let historyFilter = "all";
+
+/* LOCAL STORAGE */
+
+function saveChats() {
+
+  try {
+
+    localStorage.setItem(
+      "lumen_chats",
+      JSON.stringify(conversations)
+    );
+
+  } catch (error) {
+
+    console.warn("Local chat save error:", error);
+
+  }
+
+}
+
+function loadLocalChats() {
+
+  try {
+
+    const saved =
+      localStorage.getItem("lumen_chats");
+
+    conversations = saved
+      ? JSON.parse(saved)
+      : [];
+
+    if (!Array.isArray(conversations)) {
+      conversations = [];
+    }
+
+  } catch {
+
+    conversations = [];
+
+  }
+
+}
+
+/* CHAT ID */
+
+function createId() {
+
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,9);
+
+}
+
+function getActiveChat() {
+
+  return conversations.find(
+    chat => chat.id === activeChatId
+  );
+
+}
+
+/* SIDEBAR */
+
+function toggleSidebar() {
+
+  if (window.innerWidth <= 700) {
+
+    sidebar.classList.remove("collapsed");
+    sidebar.classList.toggle("open");
+
+  } else {
+
+    sidebar.classList.toggle("collapsed");
+
+  }
+
+}
+
+function closeSidebarOnMobile() {
+
+  if (window.innerWidth <= 700) {
+    sidebar.classList.remove("open");
+  }
+
+}
+
+/* PRO INFORMATION */
+
+function showProInfo() {
+
+  alert(
+    "PULSAR AI — All available features are currently free."
+  );
+
+}
+
+/* NAVIGATION */
+
+function setHistoryFilter(filter) {
+
+  historyFilter = filter;
+
+  document
+    .querySelectorAll(".nav-button")
+    .forEach(button => {
+      button.classList.remove("active");
+    });
+
+  const map = {
+    all: "allChatsButton",
+    favorites: "favoritesButton",
+    history: "historyButton"
+  };
+
+  document
+    .getElementById(map[filter])
+    .classList.add("active");
+
+  renderHistory();
+
+}
+
+function toggleFavorite(id) {
+
+  const chat = conversations.find(
+    item => item.id === id
+  );
+
+  if (!chat) return;
+
+  chat.favorite = !chat.favorite;
+
+  saveChats();
+  renderHistory();
+
+}
+
+/* INPUT */
+
+function focusInput(text = "") {
+
+  input.focus();
+
+  if (text) {
+
+    input.value = text;
+
+    input.setSelectionRange(
+      text.length,
+      text.length
+    );
+
+  }
+
+  input.dispatchEvent(new Event("input"));
+
+  closeSidebarOnMobile();
+
+}
+
+input.addEventListener("input", () => {
+
+  input.style.height = "auto";
+
+  input.style.height =
+    Math.min(input.scrollHeight,180) + "px";
+
+});
+
+input.addEventListener("keydown", event => {
+
+  if (
+    event.key === "Enter" &&
+    !event.shiftKey &&
+    !event.isComposing
+  ) {
+
+    event.preventDefault();
+    sendMessage();
+
+  }
+
+});
+
+/* ATTACHMENT */
+
+function toggleAttachMenu() {
+
+  const isOpen =
+    attachMenu.classList.toggle("open");
+
+  attachButton.setAttribute(
+    "aria-expanded",
+    String(isOpen)
+  );
+
+}
+
+function closeAttachMenu() {
+
+  attachMenu.classList.remove("open");
+
+  attachButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+}
+
+document.addEventListener("click", event => {
+
+  const wrap =
+    document.querySelector(".attach-wrap");
+
+  if (wrap && !wrap.contains(event.target)) {
+    closeAttachMenu();
+  }
+
+});
+
+function takePhoto() {
+
+  closeAttachMenu();
+  cameraInput.click();
+
+}
+
+function chooseImage() {
+
+  closeAttachMenu();
+  fileInput.click();
+
+}
+
+/* IMAGE COMPRESSION */
+
+function compressImage(file) {
+
+  return new Promise((resolve,reject) => {
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+
+      const image = new Image();
+
+      image.onload = () => {
+
+        const canvas =
+          document.createElement("canvas");
+
+        const maxSize = 1600;
+
+        let width = image.width;
+        let height = image.height;
+
+        if (width > maxSize || height > maxSize) {
+
+          const ratio = Math.min(
+            maxSize / width,
+            maxSize / height
+          );
+
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+
+        if (!ctx) {
+
+          reject(new Error("Canvas ishlamadi."));
+          return;
+
+        }
+
+        ctx.drawImage(
+          image,
+          0,
+          0,
+          width,
+          height
+        );
+
+        resolve(
+          canvas.toDataURL("image/jpeg",.82)
+        );
+
+      };
+
+      image.onerror = () => {
+
+        reject(
+          new Error("Rasmni ochib bo‘lmadi.")
+        );
+
+      };
+
+      image.src = reader.result;
+
+    };
+
+    reader.onerror = () => {
+
+      reject(
+        new Error("Rasm faylini o‘qib bo‘lmadi.")
+      );
+
+    };
+
+    reader.readAsDataURL(file);
+
+  });
+
+}
+
+/* IMAGE SELECTION */
+
+async function handleImageSelection(event) {
+
+  const file = event.target.files?.[0];
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+
+    alert("Iltimos, rasm faylini tanlang.");
+    event.target.value = "";
+    return;
+
+  }
+
+  if (file.size > 15 * 1024 * 1024) {
+
+    alert("Rasm hajmi 15 MB dan kichik bo‘lishi kerak.");
+    event.target.value = "";
+    return;
+
+  }
+
+  try {
+
+    selectedImageData = await compressImage(file);
+    selectedImageName = file.name;
+
+    imagePreview.src = selectedImageData;
+    imagePreviewName.textContent = file.name;
+
+    imagePreviewWrap.classList.add("visible");
+
+    attachButton.textContent = "✓";
+    attachButton.title = "Rasm tanlandi";
+
+    attachButton.style.borderColor = "#a970ff";
+
+    input.focus();
+
+  } catch (error) {
+
+    console.error("Image selection error:",error);
+
+    alert("Rasmni yuklashda xatolik yuz berdi.");
+
+  }
+
+}
+
+cameraInput.addEventListener(
+  "change",
+  handleImageSelection
+);
+
+fileInput.addEventListener(
+  "change",
+  handleImageSelection
+);
+
+/* REMOVE IMAGE */
+
+function removeSelectedImage() {
+
+  selectedImageData = null;
+  selectedImageName = "";
+
+  imagePreview.removeAttribute("src");
+
+  imagePreviewWrap.classList.remove("visible");
+
+  cameraInput.value = "";
+  fileInput.value = "";
+
+  attachButton.textContent = "+";
+  attachButton.title = "";
+  attachButton.style.borderColor = "";
+
+}
+
+/* RESET CHAT */
+
+function resetChatScreen() {
+
+  chatArea.innerHTML = "";
+
+  chatArea.classList.remove("active");
+
+  welcome.classList.remove("hidden");
+  features.classList.remove("hidden");
+
+  removeSelectedImage();
+
+  input.value = "";
+  input.style.height = "auto";
+
+}
+
+/* NEW CHAT */
+
+function newChat() {
+
+  if (busy) return;
+
+  activeChatId = createId();
+
+  messages = [];
+
+  conversations.unshift({
+
+    id: activeChatId,
+    title: "New Chat",
+    messages: [],
+    favorite: false,
+    createdAt: Date.now()
+
+  });
+
+  saveChats();
+
+  resetChatScreen();
+
+  setHistoryFilter("all");
+
+  input.focus();
+
+  closeSidebarOnMobile();
+
+}
+
+/* HISTORY */
+
+function renderHistory() {
+
+  historyElement.innerHTML = "";
+
+  document.getElementById("chatCount").textContent =
+    conversations.length;
+
+  document.getElementById("favoriteCount").textContent =
+    conversations.filter(chat => chat.favorite).length;
+
+  let list = [...conversations];
+
+  if (historyFilter === "favorites") {
+
+    list = list.filter(chat => chat.favorite);
+
+  }
+
+  if (historyFilter === "history") {
+
+    list.sort(
+      (a,b) => (b.createdAt || 0) - (a.createdAt || 0)
+    );
+
+  }
+
+  list.forEach(chat => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "history-item" +
+      (chat.id === activeChatId ? " active" : "");
+
+    const title =
+      document.createElement("span");
+
+    title.className = "history-title";
+    title.textContent = chat.title || "New Chat";
+
+    item.title = title.textContent;
+
+    const favorite =
+      document.createElement("button");
+
+    favorite.className =
+      "favorite-btn" +
+      (chat.favorite ? " selected" : "");
+
+    favorite.textContent =
+      chat.favorite ? "★" : "☆";
+
+    favorite.setAttribute(
+      "aria-label",
+      "Toggle favorite"
+    );
+
+    favorite.onclick = event => {
+
+      event.stopPropagation();
+      toggleFavorite(chat.id);
+
+    };
+
+    item.appendChild(title);
+    item.appendChild(favorite);
+
+    item.onclick = () => loadChat(chat.id);
+
+    historyElement.appendChild(item);
+
+  });
+
+}
+
+/* LOAD CHAT */
+
+function loadChat(id) {
+
+  if (busy) return;
+
+  const chat =
+    conversations.find(item => item.id === id);
+
+  if (!chat) return;
+
+  activeChatId = id;
+
+  messages = Array.isArray(chat.messages)
+    ? [...chat.messages]
+    : [];
+
+  chatArea.innerHTML = "";
+
+  welcome.classList.add("hidden");
+  features.classList.add("hidden");
+  chatArea.classList.add("active");
+
+  removeSelectedImage();
+
+  messages.forEach(message => {
+
+    addMessage(
+      message.role,
+      message.content || "",
+      false
+    );
+
+  });
+
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  renderHistory();
+  closeSidebarOnMobile();
+
+}
+
+/* CREATE CHAT IF NEEDED */
+
+function ensureActiveChat() {
+
+  if (activeChatId && getActiveChat()) return;
+
+  activeChatId = createId();
+
+  conversations.unshift({
+
+    id: activeChatId,
+    title: "New Chat",
+    messages: [],
+    favorite: false,
+    createdAt: Date.now()
+
+  });
+
+}
+
+/* SAVE MESSAGE LOCALLY */
+
+function saveLocalMessage(role,content) {
+
+  ensureActiveChat();
+
+  const chat = getActiveChat();
+
+  if (!chat) return;
+
+  chat.messages.push({
+
+    role,
+    content,
+    createdAt: Date.now()
+
+  });
+
+  if (
+    role === "user" &&
+    chat.title === "New Chat"
+  ) {
+
+    chat.title =
+      content.slice(0,35) || "Rasm yuborildi";
+
+  }
+
+  saveChats();
+  renderHistory();
+
+}
+
+/* SUPABASE CHAT PERSISTENCE */
+
+async function persistMessage(role,content) {
+
+  saveLocalMessage(role,content);
+
+  if (!supabaseClient || !currentUser) return;
+
+  const chat = getActiveChat();
+
+  if (!chat) return;
+
+  try {
+
+    let cloudChatId = chat.cloudId;
+
+    if (!cloudChatId) {
+
+      const {data,error} =
+        await supabaseClient
+          .from("chats")
+          .insert({
+
+            user_id: currentUser.id,
+            title: chat.title || "New Chat"
+
+          })
+          .select()
+          .single();
+
+      if (error) throw error;
+
+      cloudChatId = data.id;
+      chat.cloudId = cloudChatId;
+
+      saveChats();
+
+    }
+
+    const {error: messageError} =
+      await supabaseClient
+        .from("messages")
+        .insert({
+
+          chat_id: cloudChatId,
+          user_id: currentUser.id,
+          role,
+          content
+
+        });
+
+    if (messageError) throw messageError;
+
+  } catch (error) {
+
+    console.warn("Cloud message save error:",error);
+
+  }
+
+}
+
+/* LOAD CLOUD CHATS */
+
+async function loadCloudChats() {
+
+  if (!supabaseClient || !currentUser) return;
+
+  try {
+
+    const {data: cloudChats,error} =
+      await supabaseClient
+        .from("chats")
+        .select("*")
+        .eq("user_id",currentUser.id)
+        .order("created_at",{ascending:false});
+
+    if (error) throw error;
+
+    if (!cloudChats) return;
+
+    for (const cloudChat of cloudChats) {
+
+      const {
+        data: cloudMessages,
+        error: messageError
+      } = await supabaseClient
+        .from("messages")
+        .select("*")
+        .eq("chat_id",cloudChat.id)
+        .order("created_at",{ascending:true});
+
+      if (messageError) {
+
+        console.warn(messageError);
+        continue;
+
+      }
+
+      const existing =
+        conversations.find(
+          item => item.cloudId === cloudChat.id
+        );
+
+      const cloudConversation = {
+
+        id: existing?.id || createId(),
+
+        cloudId: cloudChat.id,
+
+        title: cloudChat.title || "New Chat",
+
+        favorite: existing?.favorite || false,
+
+        createdAt: cloudChat.created_at
+          ? new Date(cloudChat.created_at).getTime()
+          : Date.now(),
+
+        messages: (cloudMessages || []).map(message => ({
+
+          role: message.role,
+          content: message.content || ""
+
+        }))
+
+      };
+
+      if (existing) {
+
+        Object.assign(existing,cloudConversation);
+
+      } else {
+
+        conversations.push(cloudConversation);
+
+      }
+
+    }
+
+    conversations.sort(
+      (a,b) => (b.createdAt || 0) - (a.createdAt || 0)
+    );
+
+    saveChats();
+    renderHistory();
+
+  } catch (error) {
+
+    console.error("Cloud chats loading error:",error);
+
+  }
+
+}
+
+/* MESSAGE RENDERING */
+
+function addMessage(
+  role,
+  content,
+  scroll = true,
+  imageData = null
+) {
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className =
+    "message " +
+    (role === "user" ? "user-message" : "ai-message");
+
+  if (role === "user") {
+
+    const bubble =
+      document.createElement("div");
+
+    bubble.className = "user-bubble";
+
+    if (imageData) {
+
+      const image =
+        document.createElement("img");
+
+      image.className = "user-image-preview";
+      image.src = imageData;
+      image.alt = "Yuborilgan rasm";
+
+      bubble.appendChild(image);
+
+    }
+
+    if (content) {
+
+      const textNode =
+        document.createElement("div");
+
+      textNode.textContent = content;
+
+      bubble.appendChild(textNode);
+
+    }
+
+    wrapper.appendChild(bubble);
+
+  } else {
+
+    const body =
+      document.createElement("div");
+
+    body.className = "ai-content";
+
+    if (window.marked && window.DOMPurify) {
+
+      body.innerHTML = DOMPurify.sanitize(
+        marked.parse(content || "")
+      );
+
+    } else {
+
+      body.textContent = content || "";
+      body.style.whiteSpace = "pre-wrap";
+
+    }
+
+    wrapper.appendChild(body);
+
+    const copy =
+      document.createElement("button");
+
+    copy.className = "copy-btn";
+    copy.textContent = "▢ Copy";
+
+    copy.onclick = async () => {
+
+      try {
+
+        await navigator.clipboard.writeText(content);
+
+        copy.textContent = "Copied!";
+
+        setTimeout(() => {
+
+          copy.textContent = "▢ Copy";
+
+        },1200);
+
+      } catch {
+
+        copy.textContent = "Copy failed";
+
+      }
+
+    };
+
+    wrapper.appendChild(copy);
+
+  }
+
+  chatArea.appendChild(wrapper);
+
+  if (scroll) {
+
+    chatArea.scrollTop =
+      chatArea.scrollHeight;
+
+  }
+
+  return wrapper;
+
+}
+
+/* TYPING INDICATOR */
+
+function showTyping() {
+
+  document
+    .getElementById("typingIndicator")
+    ?.remove();
+
+  const typing =
+    document.createElement("div");
+
+  typing.className = "message ai-message";
+  typing.id = "typingIndicator";
+
+  typing.innerHTML = `
+    <div class="typing">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  `;
+
+  chatArea.appendChild(typing);
+
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  return typing;
+
+}
+
+/* PULSAR AI IDENTITY */
+
+function isCreatorQuestion(text) {
+
+  const normalized = text.toLowerCase();
+
+  const patterns = [
+
+    "seni kim yaratdi",
+    "seni kim yasagan",
+    "seni kim ishlab chiqqan",
+    "kim yaratgan",
+    "who created you",
+    "who made you",
+    "who built you",
+    "who developed you",
+    "pulsar ai ni kim yaratdi",
+    "pulsar ai kimniki"
+
+  ];
+
+  return patterns.some(
+    pattern => normalized.includes(pattern)
+  );
+
+}
+
+function creatorAnswer() {
+
+  return `Men **PULSAR AI** — O‘zbekistonlik dasturchi **Rakhimjanov Jahongirshoh** **Rasuljanov Abdulaziz** tomonidan ishlab chiqilgan sun’iy intellekt loyihasiman. ✦
+
+Men turli AI texnologiyalari asosida ishlayman. Maqsadim — savollarga javob berish, kod yozish, rasmlarni tahlil qilish va turli vazifalarda yordam berish.
+
+**PULSAR AI — Create Beyond Limits.**`;
+
+}
+
+/* IMAGE REQUEST DETECTION */
+
+function isImageRequest(text) {
+
+  const value = text.toLowerCase().trim();
+
+  const patterns = [
+
+    "rasm yarat",
+    "rasm chiz",
+    "surat yarat",
+    "generate image",
+    "create image",
+    "draw an image",
+    "make an image",
+    "generate a picture",
+    "create a picture"
+
+  ];
+
+  return patterns.some(
+    pattern => value.includes(pattern)
+  );
+
+}
+
+/* IMAGE GENERATION */
+
+async function generateImage(prompt) {
+
+  const response = await fetch("/api/image",{
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({prompt})
+
+  });
+
+  let data = {};
+
+  try {
+
+    data = await response.json();
+
+  } catch {}
+
+  if (!response.ok) {
+
+    throw new Error(
+      data.error ||
+      "Rasm yaratishda server xatosi."
+    );
+
+  }
+
+  const imageUrl =
+
+    data.imageUrl ||
+    data.image ||
+    data.url ||
+    data.result?.imageUrl ||
+    data.result?.url;
+
+  if (!imageUrl) {
+
+    throw new Error(
+      "Server rasm manzilini qaytarmadi."
+    );
+
+  }
+
+  document
+    .getElementById("typingIndicator")
+    ?.remove();
+
+  addGeneratedImage(imageUrl,prompt);
+
+  return imageUrl;
+
+}
+
+/* GENERATED IMAGE DISPLAY */
+
+function addGeneratedImage(imageUrl,prompt) {
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className = "message ai-message";
+
+  const card =
+    document.createElement("div");
+
+  card.className = "generated-image-card";
+
+  const image =
+    document.createElement("img");
+
+  image.src = imageUrl;
+  image.alt = "PULSAR AI yaratgan rasm";
+  image.loading = "lazy";
+
+  const caption =
+    document.createElement("div");
+
+  caption.className =
+    "generated-image-caption";
+
+  caption.textContent =
+    "✦ PULSAR AI tomonidan yaratildi";
+
+  const download =
+    document.createElement("a");
+
+  download.href = imageUrl;
+  download.target = "_blank";
+  download.rel = "noopener";
+  download.textContent = "↗ Rasmni ochish";
+
+  download.style.cssText =
+    "display:inline-block;margin:10px 2px 2px;color:#c4a4f4;font-size:11px;text-decoration:none;";
+
+  card.appendChild(image);
+  card.appendChild(caption);
+  card.appendChild(download);
+
+  wrapper.appendChild(card);
+
+  chatArea.appendChild(wrapper);
+
+  chatArea.scrollTop =
+    chatArea.scrollHeight;
+
+}
+
+/* SEND MESSAGE */
+
+async function sendMessage() {
+
+  const text = input.value.trim();
+  const imageData = selectedImageData;
+
+  if ((!text && !imageData) || busy) return;
+
+  busy = true;
+  sendBtn.disabled = true;
+
+  welcome.classList.add("hidden");
+  features.classList.add("hidden");
+  chatArea.classList.add("active");
+
+  input.value = "";
+  input.style.height = "auto";
+
+  removeSelectedImage();
+  ensureActiveChat();
+
+  const userContent =
+    text || "Rasmni tahlil qilib ber.";
+
+  messages.push({
+
+    role: "user",
+    content: userContent
+
+  });
+
+  addMessage(
+    "user",
+    text,
+    true,
+    imageData
+  );
+
+  showTyping();
+
+  try {
+
+    await persistMessage(
+      "user",
+      text || "Rasm yuborildi."
+    );
+
+    if (!imageData && isImageRequest(text)) {
+
+      const typing =
+        document.getElementById("typingIndicator");
+
+      if (typing) {
+
+        typing.innerHTML = `
+
+          <div class="ai-content">
+            Rasmingiz yaratilmoqda... ✦
+          </div>
+
+          <div class="typing">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+        `;
+
+      }
+
+      await generateImage(text);
+
+      const imageReply = "🖼 Rasm yaratildi.";
+
+      messages.push({
+
+        role: "assistant",
+        content: imageReply
+
+      });
+
+      await persistMessage(
+        "assistant",
+        imageReply
+      );
+
+    } else {
+
+      let reply = "";
+
+      if (!imageData && isCreatorQuestion(text)) {
+
+        reply = creatorAnswer();
+
+      } else {
+
+        const response = await fetch("/api/chat",{
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+
+            message:
+              text || "Ushbu rasmni tahlil qilib ber.",
+
+            messages: messages,
+
+            image: imageData
+              ? {
+                  data: imageData,
+                  mimeType: "image/jpeg"
+                }
+              : null
+
+          })
+
+        });
+
+        let data = {};
+
+        try {
+
+          data = await response.json();
+
+        } catch {}
+
+        if (!response.ok || !data.reply) {
+
+          throw new Error(
+
+            data.error ||
+            data.message ||
+            "Server javob qaytarmadi."
+
+          );
+
+        }
+
+        reply = data.reply;
+
+      }
+
+      document
+        .getElementById("typingIndicator")
+        ?.remove();
+
+      messages.push({
+
+        role: "assistant",
+        content: reply
+
+      });
+
+      addMessage("assistant",reply);
+
+      await persistMessage(
+        "assistant",
+        reply
+      );
+
+    }
+
+    const chat = getActiveChat();
+
+    if (chat) {
+
+      chat.messages = messages.map(item => ({
+
+        role: item.role,
+        content: item.content
+
+      }));
+
+    }
+
+    saveChats();
+    renderHistory();
+
+  } catch (error) {
+
+    console.error("PULSAR AI error:",error);
+
+    document
+      .getElementById("typingIndicator")
+      ?.remove();
+
+    const errorMessage =
+
+      "Javob olishda xatolik yuz berdi.\n\n" +
+
+      error.message +
+
+      "\n\nServer va API sozlamalarini tekshiring.";
+
+    addMessage(
+      "assistant",
+      errorMessage
+    );
+
+  } finally {
+
+    busy = false;
+    sendBtn.disabled = false;
+
+    input.focus();
+
+  }
+
+}
+
+/* EXPORT CHAT */
+
+function exportChat() {
+
+  if (!messages.length) {
+
+    alert("Eksport qilish uchun chat mavjud emas.");
+    return;
+
+  }
+
+  const content = messages.map(message => {
+
+    const title = message.role === "user"
+      ? "Siz"
+      : "PULSAR AI";
+
+    return title + ":\n" + message.content;
+
+  }).join("\n\n--------------------\n\n");
+
+  const blob = new Blob(
+
+    [content],
+
+    {
+      type: "text/plain;charset=utf-8"
+    }
+
+  );
+
+  const url = URL.createObjectURL(blob);
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+  link.download = "pulsar-ai-chat.txt";
+
+  link.click();
+
+  URL.revokeObjectURL(url);
+
+}
+
+/* MODEL */
+
+function toggleModel() {
+
+  alert("PULSAR AI v1.0 — Default model");
+
+}
+
+/* VOICE INPUT */
+
+function voiceInput() {
+
+  const SpeechRecognition =
+
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    alert(
+      "Brauzeringiz ovozli kiritishni qo‘llab-quvvatlamaydi."
+    );
+
+    return;
+
+  }
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.lang = "uz-UZ";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = event => {
+
+    const transcript =
+      event.results[0][0].transcript;
+
+    input.value =
+
+      (input.value ? input.value + " " : "") +
+
+      transcript;
+
+    input.dispatchEvent(new Event("input"));
+
+    input.focus();
+
+  };
+
+  recognition.onerror = event => {
+
+    console.error("Voice error:",event.error);
+
+    alert("Ovozli kiritishda xatolik yuz berdi.");
+
+  };
+
+  recognition.start();
+
+}
+
+/* AUTH MODAL */
+
+function openAuthModal() {
+
+  document.getElementById("authModal")
+    .style.display = "flex";
+
+  updateAuthUI();
+
+}
+
+function closeAuthModal() {
+
+  document.getElementById("authModal")
+    .style.display = "none";
+
+}
+
+function authBackdropClick(event) {
+
+  if (event.target.id === "authModal") {
+
+    closeAuthModal();
+
+  }
+
+}
+
+/* AUTH MODE */
+
+function switchAuthMode(mode) {
+
+  authMode = mode;
+
+  const title =
+    document.getElementById("authTitle");
+
+  const subtitle =
+    document.getElementById("authSubtitle");
+
+  const submit =
+    document.getElementById("authSubmitButton");
+
+  const switchBox =
+    document.getElementById("authSwitch");
+
+  const code =
+    document.getElementById("authCode");
+
+  document.getElementById("authStatus")
+    .textContent = "";
+
+  code.style.display = "none";
+
+  if (mode === "signup") {
+
+    title.textContent =
+      "Create your account";
+
+    subtitle.textContent =
+      "Join PULSAR AI and explore new possibilities.";
+
+    submit.textContent =
+      "Create account";
+
+    switchBox.innerHTML = `
+
+      Already have an account?
+
+      <button onclick="switchAuthMode('signin')">
+        Sign in
+      </button>
+
+    `;
+
+  } else {
+
+    title.textContent =
+      "Welcome to PULSAR AI";
+
+    subtitle.textContent =
+      "Sign in to continue your journey.";
+
+    submit.textContent =
+      "Sign in";
+
+    switchBox.innerHTML = `
+
+      Don't have an account?
+
+      <button onclick="switchAuthMode('signup')">
+        Create account
+      </button>
+
+    `;
+
+  }
+
+}
+
+/* AUTH STATUS */
+
+function setAuthStatus(message,isError = false) {
+
+  const status =
+    document.getElementById("authStatus");
+
+  status.textContent = message;
+
+  status.style.color =
+    isError ? "#ff9cae" : "#c4a4f4";
+
+}
+
+/* EMAIL AUTH */
+
+async function emailAuth() {
+
+  if (!supabaseClient) {
+
+    setAuthStatus(
+      "Supabase ulanmagan. Sozlamalarni tekshiring.",
+      true
+    );
+
+    return;
+
+  }
+
+  const email =
+    document.getElementById("authEmail")
+      .value.trim();
+
+  const password =
+    document.getElementById("authPassword")
+      .value;
+
+  const button =
+    document.getElementById("authSubmitButton");
+
+  if (!email || !password) {
+
+    setAuthStatus(
+      "Email va parolni kiriting.",
+      true
+    );
+
+    return;
+
+  }
+
+  if (password.length < 8) {
+
+    setAuthStatus(
+      "Parol kamida 8 ta belgidan iborat bo‘lishi kerak.",
+      true
+    );
+
+    return;
+
+  }
+
+  button.disabled = true;
+
+  setAuthStatus("Iltimos, kuting...");
+
+  try {
+
+    if (authMode === "signup") {
+
+      const {data,error} =
+        await supabaseClient.auth.signUp({
+
+          email,
+          password
+
+        });
+
+      if (error) throw error;
+
+      if (data.session) {
+
+        currentUser = data.user;
+        currentAuthSession = data.session;
+
+        updateAuthUI();
+
+        await loadCloudChats();
+
+        setAuthStatus(
+          "Akkaunt muvaffaqiyatli yaratildi!"
+        );
+
+        setTimeout(closeAuthModal,1000);
+
+      } else {
+
+        setAuthStatus(
+          "Tasdiqlash havolasi emailingizga yuborildi. Emailingizni tekshiring."
+        );
+
+      }
+
+    } else {
+
+      const {data,error} =
+        await supabaseClient.auth.signInWithPassword({
+
+          email,
+          password
+
+        });
+
+      if (error) throw error;
+
+      currentUser = data.user;
+      currentAuthSession = data.session;
+
+      updateAuthUI();
+
+      await loadCloudChats();
+
+      setAuthStatus("Muvaffaqiyatli kirdingiz!");
+
+      setTimeout(closeAuthModal,1000);
+
+    }
+
+  } catch (error) {
+
+    console.error("Authentication error:",error);
+
+    setAuthStatus(error.message,true);
+
+  } finally {
+
+    button.disabled = false;
+
+  }
+
+}
+
+/* GOOGLE LOGIN */
+
+async function googleLogin() {
+
+  if (!supabaseClient) {
+
+    setAuthStatus(
+      "Supabase ulanmagan.",
+      true
+    );
+
+    return;
+
+  }
+
+  try {
+
+    const {error} =
+      await supabaseClient.auth.signInWithOAuth({
+
+        provider: "google",
+
+        options: {
+          redirectTo: window.location.origin
+        }
+
+      });
+
+    if (error) throw error;
+
+  } catch (error) {
+
+    console.error("Google login error:",error);
+
+    setAuthStatus(error.message,true);
+
+  }
+
+}
+
+/* LOGOUT */
+
+async function logoutAccount() {
+
+  if (!supabaseClient) return;
+
+  const confirmed = confirm(
+    "Haqiqatan ham akkauntdan chiqmoqchimisiz?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+
+    const {error} =
+      await supabaseClient.auth.signOut();
+
+    if (error) throw error;
+
+    currentUser = null;
+    currentAuthSession = null;
+
+    updateAuthUI();
+
+    setAuthStatus("Akkauntdan chiqdingiz.");
+
+    closeAuthModal();
+
+  } catch (error) {
+
+    console.error("Logout error:",error);
+
+    setAuthStatus(error.message,true);
+
+  }
+
+}
+
+/* PROFILE UPDATE */
+
+function updateAuthUI() {
+
+  const accountText =
+    document.getElementById("accountButtonText");
+
+  const avatar =
+    document.getElementById("profileAvatar");
+
+  const logoutButton =
+    document.getElementById("authLogoutButton");
+
+  const authForm =
+    document.getElementById("authForm");
+
+  if (currentUser) {
+
+    const name =
+
+      currentUser.user_metadata?.full_name ||
+
+      currentUser.user_metadata?.name ||
+
+      currentUser.email?.split("@")[0] ||
+
+      "My Account";
+
+    accountText.textContent =
+      name + " ⌄";
+
+    avatar.textContent = name
+      .split(/\s+/)
+      .slice(0,2)
+      .map(part => part[0] || "")
+      .join("")
+      .toUpperCase();
+
+    authForm.style.display = "none";
+    logoutButton.style.display = "block";
+
+    document.getElementById("authTitle")
+      .textContent = "Your PULSAR Account";
+
+    document.getElementById("authSubtitle")
+      .textContent = currentUser.email || "";
+
+  } else {
+
+    accountText.textContent = "Guest ⌄";
+    avatar.textContent = "G";
+
+    authForm.style.display = "block";
+    logoutButton.style.display = "none";
+
+    switchAuthMode("signin");
+
+  }
+
+}
+
+/* INITIALIZE SUPABASE */
+
+async function initializeSupabase() {
+
+  if (!supabaseClient) {
+
+    console.warn("Supabase client unavailable.");
+
+    return;
+
+  }
+
+  try {
+
+    const {
+
+      data: {session},
+      error
+
+    } = await supabaseClient.auth.getSession();
+
+    if (error) throw error;
+
+    currentAuthSession = session;
+    currentUser = session?.user || null;
+
+    updateAuthUI();
+
+    if (currentUser) {
+
+      await loadCloudChats();
+
+    }
+
+    supabaseClient.auth.onAuthStateChange(
+
+      (event,session) => {
+
+        currentAuthSession = session;
+        currentUser = session?.user || null;
+
+        updateAuthUI();
+
+        if (
+          currentUser &&
+          event !== "TOKEN_REFRESHED"
+        ) {
+
+          setTimeout(() => {
+
+            loadCloudChats();
+
+          },0);
+
+        }
+
+      }
+
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Supabase initialization error:",
+      error
+    );
+
+  }
+
+}
+
+/* START APPLICATION */
+
+loadLocalChats();
+
+renderHistory();
+
+initializeSupabase();
+
+if (!activeChatId) {
+
+  resetChatScreen();
+
+}
+
+/* MOBILE SIDEBAR OUTSIDE CLICK */
+
+document.addEventListener("click",event => {
+
+  if (window.innerWidth > 700) return;
+
+  if (
+
+    sidebar.classList.contains("open") &&
+
+    !sidebar.contains(event.target) &&
+
+    !event.target.closest(".topbar")
+
+  ) {
+
+    sidebar.classList.remove("open");
+
+  }
+
+});
+
+/* ESC KEY */
+
+document.addEventListener("keydown",event => {
+
+  if (event.key === "Escape") {
+
+    closeAuthModal();
+    closeAttachMenu();
+    closeSidebarOnMobile();
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
